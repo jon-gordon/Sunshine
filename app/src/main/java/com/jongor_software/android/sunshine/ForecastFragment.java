@@ -1,6 +1,7 @@
 package com.jongor_software.android.sunshine;
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.jongor_software.android.sunshine.data.FetchWeatherTask;
@@ -116,6 +118,25 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // We traverse "rootView" to search for our ListView (non-static, sub-tree, etc)
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
+
+        // Re-add our onClickListener to allow detail view to work again
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView parent, View view, int position, long id) {
+                // CursorAdapter returns a cursor at the correct position for getItem() or null
+                // if it cannot seek to that position
+                Cursor c = (Cursor) parent.getItemAtPosition(position);
+                if (c != null) {
+                    String locationSetting = Utility.getPreferredLocation(getActivity());
+                    Intent intent = new Intent(getActivity(), DetailActivity.class)
+                            .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+                                    locationSetting,
+                                    c.getLong(COL_WEATHER_DATE)
+                            ));
+                    startActivity(intent);
+                }
+            }
+        });
 
         return rootView;
     }
