@@ -67,7 +67,7 @@ public class DetailActivity extends ActionBarActivity {
         private static final String LOG_TAG = DetailActivity.class.getSimpleName();
 
         private static final String FORECAST_SHARE_HASHTAG = "#SunshineApp";
-        private String mForecastStr;
+        private String mForecast;
         private ShareActionProvider mShareActionProvider;
 
         private static final int DETAIL_LOADER = 1;
@@ -103,7 +103,7 @@ public class DetailActivity extends ActionBarActivity {
             mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
             // If onLoadFinished() happens before this, we cna go ahead and set the share intent now
-            if (mForecastStr != null) {
+            if (mForecast != null) {
                 mShareActionProvider.setShareIntent(createShareForecastIntent());
             }
         }
@@ -118,7 +118,7 @@ public class DetailActivity extends ActionBarActivity {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
             shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, mForecastStr + FORECAST_SHARE_HASHTAG);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, mForecast + FORECAST_SHARE_HASHTAG);
             return shareIntent;
         }
 
@@ -161,10 +161,10 @@ public class DetailActivity extends ActionBarActivity {
             String high = Utility.formatTemperature(data.getDouble(COL_WEATHER_MAX_TEMP), isMetric);
             String low = Utility.formatTemperature(data.getDouble(COL_WEATHER_MIN_TEMP), isMetric);
 
-            mForecastStr = String.format("%s - %s - %s/%s", dateString, weatherDescription, high, low);
+            mForecast = String.format("%s - %s - %s/%s", dateString, weatherDescription, high, low);
 
             TextView detailView = (TextView) getView().findViewById(R.id.forecast_detail);
-            detailView.setText(mForecastStr);
+            detailView.setText(mForecast);
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now
             if (mShareActionProvider != null) {
