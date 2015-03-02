@@ -20,27 +20,6 @@ public class ForecastAdapter extends CursorAdapter {
         super(context, c, flags);
     }
 
-    /**
-     * Prepare high/lows for presentation
-     */
-    private String formatHighLows(double high, double low) {
-        boolean isMetric = Utility.isMetric(mContext);
-        return Utility.formatTemperature(high, isMetric) + "/" + Utility.formatTemperature(low, isMetric);
-    }
-
-    /**
-     * This is ported from FetchWeatherTask
-     */
-    private String convertCursorRowToUXFormat(Cursor c) {
-        String highAndLow = formatHighLows(
-                c.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP),
-                c.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP));
-
-        return Utility.formatDate(c.getLong(ForecastFragment.COL_WEATHER_DATE)) +
-                " - " + c.getString(ForecastFragment.COL_WEATHER_DESC) +
-                " - " + highAndLow;
-    }
-
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.list_item_forecast, parent, false);
