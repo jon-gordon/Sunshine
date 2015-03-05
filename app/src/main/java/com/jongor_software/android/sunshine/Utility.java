@@ -12,10 +12,6 @@ import java.util.Date;
 
 public class Utility {
 
-    // Format used for storing dates in the database. Also used for converting those strings
-    // back into date objects for comparison/processing
-    public static final String DATE_FORMAT = "yyyyMMdd";
-
     public static String getPreferredLocation(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(
@@ -31,12 +27,12 @@ public class Utility {
                 .equals(context.getString(R.string.pref_units_metric));
     }
 
-    public static String formatTemperature(double temperature, boolean isMetric) {
+    public static String formatTemperature(Context context, double temperature, boolean isMetric) {
         if (!isMetric) {
             temperature = ((9 / 5) * temperature) + 32;
         }
 
-        return String.format("%.0f", temperature);
+        return context.getString(R.string.format_temperature, temperature);
     }
 
     public static String formatDate(long dateInMillis) {
@@ -119,7 +115,6 @@ public class Utility {
     /**
      * Converts the db date format to the format "Month day", e.g "June 24"
      *
-     * @param context Context to use for resource localisation
      * @param dateInMillis The db formatted date string, expected to be of the form specified
      *                     in Utility.DATE_FORMAT
      * @return The day in the form of a string formatted "December 6"
