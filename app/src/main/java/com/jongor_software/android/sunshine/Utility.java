@@ -125,4 +125,44 @@ public class Utility {
         SimpleDateFormat monthDayFormat = new SimpleDateFormat("MMMM dd");
         return monthDayFormat.format(dateInMillis);
     }
+
+    public static String getFormattedWind(Context context, float windSpeed, float degrees) {
+        int windFormat;
+        if (Utility.isMetric(context)) {
+            windFormat = R.string.format_wind_kmh;
+        }
+        else {
+            windFormat = R.string.format_wind_mph;
+            windSpeed *= 0.621371192237334f;
+        }
+
+        // From wind direction in degrees, determine compass direction as a string (e.g. NW)
+        int direction = R.string.direction_unknown;
+        if (degrees >= 337.5 || degrees < 22.5) {
+            direction = R.string.direction_north;
+        }
+        else if (degrees >= 22.5 || degrees < 67.5) {
+            direction = R.string.direction_northeast;
+        }
+        else if (degrees >= 67.5 || degrees < 112.5) {
+            direction = R.string.direction_east;
+        }
+        else if (degrees >= 112.5 || degrees < 157.5) {
+            direction = R.string.direction_southeast;
+        }
+        else if (degrees >= 157.5 || degrees < 202.5) {
+            direction = R.string.direction_south;
+        }
+        else if (degrees >= 202.5 || degrees < 247.5) {
+            direction = R.string.direction_southwest;
+        }
+        else if (degrees >= 247.5 || degrees < 292.5) {
+            direction = R.string.direction_west;
+        }
+        else if (degrees >= 292.5 || degrees < 337.5) {
+            direction = R.string.direction_northwest;
+        }
+
+        return String.format(context.getString(windFormat), windSpeed, context.getString(direction));
+    }
 }
