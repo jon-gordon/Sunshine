@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private static final String DETAIL_FRAGMENT_TAG = "detail_fragment";
@@ -77,14 +77,41 @@ public class MainActivity extends ActionBarActivity {
 
         // Update the location in our second pane using the fragment manager
         if (location != null && !location.equals(mLocation)) {
-            ForecastFragment fragment =
+            ForecastFragment forecastFragment =
                     (ForecastFragment) getSupportFragmentManager()
                             .findFragmentById(R.id.fragment_forecast);
-            if (fragment != null) {
-                fragment.onLocationChanged();
+            if (forecastFragment != null) {
+                forecastFragment.onLocationChanged();
+            }
+
+            DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager()
+                    .findFragmentByTag(DETAIL_FRAGMENT_TAG);
+            if (detailFragment != null) {
+                detailFragment.onLocationChanged(location);
             }
 
             mLocation = location;
+        }
+    }
+
+    @Override
+    public void onItemSelected(Uri contentUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by adding or replacing
+            // the detail fragment using a fragment transaction
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAIL_URI, contentUri);
+
+            DetailFragment detailFragment = new DetailFragment();
+            detailFragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.weather_detail_container, detailFragment, DETAIL_FRAGMENT_TAG)
+                    .commit();
+        }
+        else {
+            Intent intent = new Intent(this, DetailActivity.class).setData(contentUri);
+            startActivity(intent);
         }
     }
 
