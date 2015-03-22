@@ -1,11 +1,9 @@
 package com.jongor_software.android.sunshine;
 
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.jongor_software.android.sunshine.data.FetchWeatherTask;
 import com.jongor_software.android.sunshine.data.WeatherContract;
 
 
@@ -116,16 +113,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // Re-add our onClickListener to allow detail view to work again
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView parent, View view, int position, long id) {
-                // CursorAdapter returns a cursor at the correct position for getItem() or null
-                // if it cannot seek to that position
-                Cursor c = (Cursor) parent.getItemAtPosition(position);
-                if (c != null) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                // CursorAdapter returns a cursor at the correct position for getItem(), or null
+                // if it cannot seek to that position.
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                if (cursor != null) {
                     String locationSetting = Utility.getPreferredLocation(getActivity());
                     Intent intent = new Intent(getActivity(), DetailActivity.class)
                             .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-                                    locationSetting,
-                                    c.getLong(COL_WEATHER_DATE)
+                                    locationSetting, cursor.getLong(COL_WEATHER_DATE)
                             ));
                     startActivity(intent);
                 }
@@ -136,7 +132,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(FORECAST_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }

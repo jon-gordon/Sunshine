@@ -40,6 +40,10 @@ public class Utility {
         return DateFormat.getDateInstance().format(date);
     }
 
+    // Format used for storing dates in the database.  ALso used for converting those strings
+    // back into date objects for comparison/processing.
+    public static final String DATE_FORMAT = "yyyyMMdd";
+
     /**
      * Helper method to convert the database representation of the date into something to display to
      * users.  As classy and polished a user experience as "20150301" is, we can do better

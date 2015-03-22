@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jongor_software.android.sunshine" >
 
+    <!-- This permission is necessary in order for Sunshine to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -34,7 +35,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jongor_software.android.sunshine.MainActivity" />
         </activity>
-
         <provider
             android:authorities="com.jongor_software.android.sunshine"
             android:name=".data.WeatherProvider" />

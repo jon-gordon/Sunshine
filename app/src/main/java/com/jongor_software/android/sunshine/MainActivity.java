@@ -12,10 +12,12 @@ import android.view.MenuItem;
 public class MainActivity extends ActionBarActivity {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
-    private final String FORECAST_FRAGMENT_TAG = "forecast_fragment";
+    private static final String DETAIL_FRAGMENT_TAG = "detail_fragment";
 
+    private boolean mTwoPane;
     private String mLocation;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v(LOG_TAG, "*** - onCreate");
@@ -23,10 +25,22 @@ public class MainActivity extends ActionBarActivity {
         mLocation = Utility.getPreferredLocation(this);
 
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment(), FORECAST_FRAGMENT_TAG)
-                    .commit();
+        if (findViewById(R.id.weather_detail_container) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600dp).  If the view is present, then the activity should be in
+            // two-pane mode
+            mTwoPane = true;
+
+            // In two-pane mode, show the detail view in this activity by adding or replacing
+            // the detail fragment using a fragment transaction
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.weather_detail_container, new DetailFragment(), DETAIL_FRAGMENT_TAG)
+                        .commit();
+            }
+        }
+        else {
+            mTwoPane = false;
         }
     }
 
@@ -65,7 +79,7 @@ public class MainActivity extends ActionBarActivity {
         if (location != null && !location.equals(mLocation)) {
             ForecastFragment fragment =
                     (ForecastFragment) getSupportFragmentManager()
-                            .findFragmentByTag(FORECAST_FRAGMENT_TAG);
+                            .findFragmentById(R.id.fragment_forecast);
             if (fragment != null) {
                 fragment.onLocationChanged();
             }

@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jongor_software.android.sunshine.data;
+package com.jongor_software.android.sunshine;
 
 import android.annotation.TargetApi;
 import android.database.Cursor;
 import android.test.AndroidTestCase;
+
+import com.jongor_software.android.sunshine.data.WeatherContract;
 
 public class TestFetchWeatherTask extends AndroidTestCase{
     static final String ADD_LOCATION_SETTING = "Sunnydale, CA";
@@ -37,7 +39,7 @@ public class TestFetchWeatherTask extends AndroidTestCase{
                 WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
                 new String[]{ADD_LOCATION_SETTING});
 
-        com.jongor_software.android.sunshine.data.FetchWeatherTask fwt = new com.jongor_software.android.sunshine.data.FetchWeatherTask(getContext(), null);
+        FetchWeatherTask fwt = new FetchWeatherTask(getContext());
         long locationId = fwt.addLocation(ADD_LOCATION_SETTING, ADD_LOCATION_CITY,
                 ADD_LOCATION_LAT, ADD_LOCATION_LON);
 
@@ -74,6 +76,8 @@ public class TestFetchWeatherTask extends AndroidTestCase{
                         locationCursor.getDouble(3), ADD_LOCATION_LAT);
                 assertEquals("Error: the queried value of longitude is incorrect",
                         locationCursor.getDouble(4), ADD_LOCATION_LON);
+            } else {
+                fail("Error: the id you used to query returned an empty cursor");
             }
 
             // there should be no more records
