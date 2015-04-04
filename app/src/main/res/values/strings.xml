@@ -85,4 +85,8 @@
     <string name="direction_west">W</string>
     <string name="direction_northwest">NW</string>
 
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">sunshine.jongor_software.com</string>
+    <string name="content_authority">com.jongor_software.android.sunshine</string>
+
 </resources>
