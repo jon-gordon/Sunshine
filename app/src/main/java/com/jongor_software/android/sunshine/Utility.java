@@ -54,7 +54,7 @@ public class Utility {
      */
     public static String getFriendlyDayString(Context context, long dateInMillis) {
         // The day string for forecast uses the following logic:
-        // For today: "Today, June 8"
+        // For today: "Today"
         // For tomorrow: "Tomorrow"
         // For the next 5 days: "Wednesday" i.e. the day name
         // For all days after that: "Mon Jun 8"
@@ -66,15 +66,9 @@ public class Utility {
         int currentJulianDay = Time.getJulianDay(currentTime, time.gmtoff);
 
         // If the date we're building the String for is today's date, the format is
-        // "Today, June 24"
+        // "Today"
         if (julianDay == currentJulianDay) {
-            String today = context.getString(R.string.today);
-            int formatId = R.string.format_full_friendly_date;
-
-            return String.format(context.getString(
-                    formatId,
-                    today,
-                    getFormattedMonthDay(dateInMillis)));
+            return "Today";
         }
         else if (julianDay < currentJulianDay + 7) {
             // If the input date is less than a week in the future, just return the day name
