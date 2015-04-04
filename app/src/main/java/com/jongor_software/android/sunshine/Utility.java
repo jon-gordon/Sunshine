@@ -27,8 +27,8 @@ public class Utility {
                 .equals(context.getString(R.string.pref_units_metric));
     }
 
-    public static String formatTemperature(Context context, double temperature, boolean isMetric) {
-        if (!isMetric) {
+    public static String formatTemperature(Context context, double temperature) {
+        if (!isMetric(context)) {
             temperature = ((9 / 5) * temperature) + 32;
         }
 
