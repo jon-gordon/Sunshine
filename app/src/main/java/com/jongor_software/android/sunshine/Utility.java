@@ -68,7 +68,7 @@ public class Utility {
         // If the date we're building the String for is today's date, the format is
         // "Today"
         if (julianDay == currentJulianDay) {
-            return "Today";
+            return context.getString(R.string.today);
         }
         else if (julianDay < currentJulianDay + 7) {
             // If the input date is less than a week in the future, just return the day name
